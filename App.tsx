@@ -1,18 +1,19 @@
 import * as React from "react";
 import { Button, View, Text } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, TabActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 function HomeScreen({ navigation, route }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Home Screen</Text>
       <Button
-        title="Go to Detail"
+        title="詳細へ進む"
         onPress={() =>
           navigation.navigate("Details", {
             itemId: 86,
-            otherParam: "anything you want here",
+            otherParam: "詳細画面へようこそ、他のボタンも押してみよう",
           })
         }
       />
@@ -24,24 +25,29 @@ function DetailsScreen({ route, navigation }) {
   const { itemId, otherParam } = route.params;
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Details Screen</Text>
-      <Text>itemId: {JSON.stringify(itemId)}</Text>
-      <Text>otherParam: {JSON.stringify(otherParam)}</Text>
+      <Text>詳細画面</Text>
+      <Text>ランダムカウント: {JSON.stringify(itemId)}</Text>
+      <Text>コメント: {JSON.stringify(otherParam)}</Text>
       <Button
-        title="Go to Details...again"
+        title="再度詳細へ進む"
         onPress={() =>
           navigation.push("Details", {
             itemId: Math.floor(Math.random() * 100),
           })
         }
       />
-      <Button title="Go to Home" onPress={() => navigation.navigate("Home")} />
-      <Button title="Go Back" onPress={() => navigation.goBack()} />
+      <Button
+        title="ホームへ戻る"
+        onPress={() => navigation.navigate("Home")}
+      />
+      <Button title="戻る" onPress={() => navigation.goBack()} />
     </View>
   );
 }
 
 const Stack = createStackNavigator();
+
+const Tab = createBottomTabNavigator();
 
 function App() {
   return (
@@ -50,7 +56,23 @@ function App() {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: "HelloReactNavigation" }}
+          options={{
+            title: "こんにちは、ReactNavigation",
+            headerStyle: {
+              backgroundColor: "#f4511e",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerTitleAlign: "center",
+            headerRight: () => (
+              <Button
+                onPress={() => alert("これはボタンです")}
+                title="ボタン"
+              />
+            ),
+          }}
         />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
