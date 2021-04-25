@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, View, Text } from "react-native";
+import { Button, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { NavigationContainer, TabActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -7,16 +7,19 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 function HomeScreen({ navigation, route }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="詳細へ進む"
+      <Text>ホーム画面</Text>
+      {/* 詳細へ進むボタンの実装 */}
+      <TouchableOpacity
+        style={styles.button}
         onPress={() =>
           navigation.navigate("Details", {
             itemId: 86,
             otherParam: "詳細画面へようこそ、他のボタンも押してみよう",
           })
         }
-      />
+      >
+        <Text style={styles.text}>詳細へ進む</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -24,23 +27,35 @@ function HomeScreen({ navigation, route }) {
 function DetailsScreen({ route, navigation }) {
   const { itemId, otherParam } = route.params;
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ flex: 2, alignItems: "center", justifyContent: "center" }}>
       <Text>詳細画面</Text>
       <Text>ランダムカウント: {JSON.stringify(itemId)}</Text>
       <Text>コメント: {JSON.stringify(otherParam)}</Text>
-      <Button
-        title="再度詳細へ進む"
+      {/* 詳細へ進むボタンの実装 */}
+      <TouchableOpacity
+        style={styles.button}
         onPress={() =>
           navigation.push("Details", {
             itemId: Math.floor(Math.random() * 100),
           })
         }
-      />
-      <Button
-        title="ホームへ戻る"
+      >
+        <Text style={styles.text}>再度詳細へ進む</Text>
+      </TouchableOpacity>
+      {/* ホームへ戻るボタンの実装 */}
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => navigation.navigate("Home")}
-      />
-      <Button title="戻る" onPress={() => navigation.goBack()} />
+      >
+        <Text style={styles.text}>ホームへ戻る</Text>
+      </TouchableOpacity>
+      {/* 一つ前へ戻るボタンの実装 */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.text}>戻る</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -61,16 +76,18 @@ function App() {
             headerStyle: {
               backgroundColor: "#f4511e",
             },
-            headerTintColor: "#fff",
+            headerTintColor: "white",
             headerTitleStyle: {
               fontWeight: "bold",
             },
             headerTitleAlign: "center",
             headerRight: () => (
-              <Button
+              <TouchableOpacity
+                style={styles.button_small}
                 onPress={() => alert("これはボタンです")}
-                title="ボタン"
-              />
+              >
+                <Text style={styles.text}>ボタン</Text>
+              </TouchableOpacity>
             ),
           }}
         />
@@ -79,5 +96,24 @@ function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    backgroundColor: "#1DC0F4",
+  },
+  button_small: {
+    padding: 5,
+    margin: 10,
+    borderRadius: 5,
+    backgroundColor: "#1DC0F4",
+  },
+  text: {
+    fontSize: 15,
+    color: "black",
+  },
+});
 
 export default App;
